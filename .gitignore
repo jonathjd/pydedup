@@ -1,0 +1,127 @@
+# --- Python cache/bytecode ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+.python-venv/
+pipenv/
+Pipfile.lock
+
+# --- Build and packaging ---
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+wheelhouse/
+
+# --- Installer metadata ---
+.installed.cfg
+
+# --- Logs and runtime files ---
+*.log
+logs/
+*.pid
+
+# --- Test and coverage ---
+.coverage
+.coverage.*
+.cache/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+htmlcov/
+.tox/
+.tox/*
+.nox/
+.nox/*
+
+# --- Linting and formatting caches ---
+.ruff_cache/
+.mypy_cache/
+.pyre/
+pyrightconfig.json
+.dmypy.json
+.pytype/
+
+# --- Type checker outputs ---
+typings/
+
+# --- Static analysis and build tools ---
+.sphinx/
+docs/_build/
+.build/
+site/
+
+# --- Jupyter/Notebooks (if used) ---
+.ipynb_checkpoints/
+
+# --- Environment variables and secrets ---
+.env
+.env.*
+*.env
+
+# --- Configs generated at runtime ---
+*.sqlite3
+*.db
+
+# --- OS-specific noise ---
+.DS_Store
+Thumbs.db
+
+# --- Editors/IDEs ---
+# VS Code
+.vscode/
+# JetBrains (PyCharm, IntelliJ)
+.idea/
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+# --- Poetry/Hatch/PDM (if applicable) ---
+# Poetry
+poetry.lock
+# Hatch
+.hatch/
+# PDM
+pdm.lock
+.pdm.toml
+
+# --- PyInstaller / cx_Freeze ---
+*.manifest
+*.spec
+
+# --- C extensions / compiled objects ---
+*.so
+*.o
+*.a
+*.dll
+*.dylib
+
+# --- Cython build artifacts ---
+cython_debug/
+
+# --- Temporary files ---
+*.tmp
+*.temp
+tmp/
+temp/
+
+# --- Images/output artifacts (optional, if generated) ---
+output/
+artifacts/
+
+# --- Git-specific ---
+# Keep these if you use Git LFS; otherwise you can ignore
+# .gitattributes
+# .gitconfig.local
+
+# --- Custom CLI runtime folders ---
+# Add any CLI-specific cache/state dirs here:
+.cache_cli/
+state/
