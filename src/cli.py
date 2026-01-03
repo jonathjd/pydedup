@@ -1,9 +1,10 @@
 import argparse
+from pathlib import Path
 
 from loguru import logger
 
 from dedup import DedupPhotos
-from validation import validate_hamming_distance, validate_output, validate_source
+from validation import is_valid_hamming_distance, is_valid_output, is_valid_source
 
 
 def main():
@@ -27,7 +28,7 @@ def main():
     parser.add_argument(
         "--hamming_distance",
         "-hd",
-        help="The number of differences between the hashes for 2 photos to be considered duplicates (default 14)",
+        help="The number of differences between the hashes for 2 photos to be considered duplicates (default 13)",
         required=False,
         default=13,
     )
@@ -36,20 +37,31 @@ def main():
     args = parser.parse_args()
 
     # validate args
-    try:
-        source_dir = validate_source(args.source)
-        unique_dir, dups_dir = validate_output(args.output, args.overwrite)
-        ham_dist = validate_hamming_distance(args.hamming_distance)
+    if not is_valid_source(args.source):
+        logger.error(f"Invalid source directory: {args.source}")
+        exit(1)
 
-        # pass into Dedup Obj
-        dedup = DedupPhotos(source_dir, unique_dir, dups_dir, ham_dist, args.recursive)
-        dedup.copy_images()
-        exit_code = 0
-    except Exception as e:
-        exit_code = 1
-        logger.error(e)
+    if not is_valid_output(args.output, args.overwrite):
+        logger.error(f"Invalid output directory: {args.output}")
+        exit(1)
 
-    exit(exit_code)
+    if not is_valid_hamming_distance(args.hamming_distance):
+        logger.error(f"Invalid hamming distance: {args.hamming_distance}. Must be an integer between 0 and 64.")
+        exit(1)
+
+    # setup paths after validation
+    source_dir, output_dir = Path(args.source), Path(args.output)
+    unique_dir = output_dir / "unique"
+    dups_dir = output_dir / "duplicates"
+    if not args.dryrun:
+        unique_dir.mkdir(parents=True, exist_ok=True)
+        dups_dir.mkdir(parents=True, exist_ok=True)
+    ham_dist = int(args.hamming_distance)
+
+    # pass into Dedup Obj
+    dedup = DedupPhotos(source_dir, unique_dir, dups_dir, ham_dist, args.recursive)
+    dedup.copy_images(args.dryrun)
+    exit(0)
 
 
 if __name__ == "__main__":

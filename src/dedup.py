@@ -75,7 +75,7 @@ class DedupPhotos:
             self.grouped_images.append(group)
             assigned.add(i)
 
-    def copy_images(self):
+    def copy_images(self, dryrun: bool = False):
         group_count = 0
         unique_count = 0
         for group in self.grouped_images:
@@ -84,16 +84,19 @@ class DedupPhotos:
                 image_obj = group[0]
                 rel_path = image_obj.path.relative_to(self.source_dir)
                 dest_path = self.unique_dir / rel_path
-                dest_path.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(image_obj.path, dest_path)
+                if not dryrun:
+                    dest_path.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(image_obj.path, dest_path)
                 unique_count += 1
             else:
                 # Duplicate group
                 group_count += 1
                 group_dir = self.dups_dir / f"group_{group_count}"
-                group_dir.mkdir(exist_ok=True)
                 for i, image_obj in enumerate(group, start=1):
-                    # need to append number to end of name in case a photo in 2 locs has the same name
-                    shutil.copy2(image_obj.path, group_dir / f"{i}_{image_obj.path.name}")
+                    # need to append number to end of name in case a
+                    # photo in 2 locs has the same name
+                    if not dryrun:
+                        group_dir.mkdir(exist_ok=True)
+                        shutil.copy2(image_obj.path, group_dir / f"{i}_{image_obj.path.name}")
                 print(f"Group {group_count}: {len(group)} images")
         print(f"{unique_count} unique images copied to '{self.unique_dir}'.")
