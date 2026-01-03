@@ -1,0 +1,2 @@
+[console_scripts]
+pydedup = pydedup.cli:main

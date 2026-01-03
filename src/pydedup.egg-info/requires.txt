@@ -1,0 +1,6 @@
+imagehash>=4.3.2
+pillow>=10.4.0
+loguru
+
+[dev]
+ruff

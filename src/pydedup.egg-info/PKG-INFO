@@ -1,0 +1,45 @@
+Metadata-Version: 2.4
+Name: pydedup
+Version: 0.1.0
+Summary: A CLI tool to deduplicate photos by content hash.
+Author-email: Your Name <your.email@example.com>
+License: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: imagehash>=4.3.2
+Requires-Dist: pillow>=10.4.0
+Requires-Dist: loguru
+Provides-Extra: dev
+Requires-Dist: ruff; extra == "dev"
+
+## Photo Deduplication Steps
+
+1. **Parse Inputs**  
+   Accept `source_dir` and `dest_dir` as command-line arguments.
+
+2. **Create Subdirectories**  
+   In `dest_dir`, create the following subdirectories if they don't already exist:
+   - `singles`
+   - `duplicates`
+
+3. **Scan for Photos**  
+   Recursively walk through `source_dir`, filtering files by common image extensions:
+   - `.jpg`, `.jpeg`, `.png`, `.gif`, `.bmp`, `.tiff`
+
+4. **Compute Hashes**  
+   For each photo, generate a hash based on the file's content.
+
+5. **Group by Hash**  
+   Use a dictionary or map where:
+   - **Key:** Hash value
+   - **Value:** List of file paths with that hash
+
+6. **Classify and Move Files**
+   - If a hash group contains **one file**: Move it to the `singles` directory.
+   - If a hash group contains **multiple files**: Move all files in the group to the `duplicates` directory.
+
+7. **Handle Filename Conflicts**  
+   When moving files, check if the filename already exists in the target directory. If so, rename the file (e.g., append a counter like `_dup1`).
+
+8. **Cleanup (Optional)**  
+   After moving files, optionally remove any empty subdirectories from the source directory.
